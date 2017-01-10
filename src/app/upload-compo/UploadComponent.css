@@ -1,0 +1,43 @@
+/**
+ https:tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/
+ */
+
+/** Cacher notre input fichier */
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfile + label {
+  font-size: 1.12em;
+  font-weight: 400;
+  color: white;
+  background-color: black;
+  display: inline-block;
+  cursor: pointer; /* "hand" cursor */
+}
+
+/*
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: teal;
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+*/
+
+.inputfile-1 + label {
+  color: white;/*#f1e5e6;*/
+  background-color: #76C2AF;
+}
+
+.inputfile-1:focus + label,
+.inputfile-1.has-focus + label,
+.inputfile-1 + label:hover {
+  background-color: cadetblue;
+}
+

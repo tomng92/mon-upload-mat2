@@ -1,0 +1,20 @@
+<md-list-item style="margin:12px 12px;width: 100%;display:inline-block;">
+
+  <div style="float: left;">
+    <input type="file" #monUploadInput multiple="false" [attr.name]="monId" [attr.id]="monId"
+           class="inputfile inputfile-1" (change)="uploadFichier()"/>
+
+    <label svgIcon="moon"  [attr.for]="monId">
+      <span #monUploadIcon><md-icon>home</md-icon></span>
+      <span #monUploadLabel>Veuillez choisir un fichier</span>
+
+    </label>
+  </div>
+
+  <div #divBouton style="display: none;float: right;padding-right:120px;">
+    <!--<input type="button" value="Enlever">-->
+    <button md-fab (click)="enleverUpload()"><md-icon>home</md-icon>Supprimer</button>
+  </div>
+
+
+</md-list-item>
