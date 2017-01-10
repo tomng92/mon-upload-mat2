@@ -8,17 +8,17 @@ import {MaterialModule, MdIconRegistry} from "@angular/material";
 import {UploadListComponent} from "./upload-list/UploadListComponent";
 import {UploadComponent} from "./upload-list/upload/UploadComponent";
 import 'hammerjs'
+import {UploadModule} from "./upload-list/UploadModule";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    UploadComponent,
-    UploadListComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    UploadModule,
     MaterialModule.forRoot()
   ],
 

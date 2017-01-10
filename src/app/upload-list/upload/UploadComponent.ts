@@ -7,8 +7,8 @@ import {Http, Headers, RequestOptions} from '@angular/http';
 
 @Component({
   selector: 'mon-upload-composant',
-  templateUrl: 'UploadComponent.html',
-  styleUrls: ['UploadComponent.css']
+  templateUrl: './UploadComponent.html',
+  styleUrls: ['./UploadComponent.css']
 
 })
 export class UploadComponent {
