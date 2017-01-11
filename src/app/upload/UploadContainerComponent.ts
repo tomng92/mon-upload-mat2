@@ -28,7 +28,7 @@ export class UploadContainerComponent {
    */
   constructor(private resolver: ComponentFactoryResolver) {}
 
- 
+
   /**
    * Creation d'un uploader widget.
    */

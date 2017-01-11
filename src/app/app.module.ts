@@ -5,10 +5,9 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {MaterialModule, MdIconRegistry} from "@angular/material";
-import {UploadContainerComponent} from "./upload-list/UploadContainerComponent";
-import {UploadComponent} from "./upload-list/upload/UploadComponent";
 import 'hammerjs'
-import {UploadModule} from "./upload-list/UploadModule";
+import {UploadModule} from "./upload/UploadModule";
+import {UploadComponent} from "./upload/upload/UploadComponent";
 
 @NgModule({
   declarations: [
