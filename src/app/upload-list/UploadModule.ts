@@ -1,12 +1,12 @@
 
 import {NgModule} from "@angular/core";
 import {UploadComponent} from "./upload/UploadComponent";
-import {UploadListComponent} from "./UploadListComponent";
+import {UploadContainerComponent} from "./UploadContainerComponent";
 import {MaterialModule} from "@angular/material";
 @NgModule({
-    declarations: [UploadComponent, UploadListComponent],
+    declarations: [UploadComponent, UploadContainerComponent],
     imports: [MaterialModule.forRoot()],
-    bootstrap: [UploadListComponent]
+    exports: [UploadContainerComponent]
   }
 )
 

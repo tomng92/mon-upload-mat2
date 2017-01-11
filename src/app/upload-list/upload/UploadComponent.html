@@ -4,16 +4,15 @@
     <input type="file" #monUploadInput multiple="false" [attr.name]="monId" [attr.id]="monId"
            class="inputfile inputfile-1" (change)="uploadFichier()"/>
 
-    <label svgIcon="moon"  [attr.for]="monId">
-      <span #monUploadIcon><md-icon>home</md-icon></span>
-      <span #monUploadLabel>Veuillez choisir un fichier</span>
+    <label [attr.for]="monId">
+      <span #monUploadIcon><md-icon>file_upload</md-icon></span>
+      <span #monUploadLabel>Choisir un fichier</span>
 
     </label>
   </div>
 
   <div #divBouton style="display: none;float: right;padding-right:120px;">
-    <!--<input type="button" value="Enlever">-->
-    <button md-fab (click)="enleverUpload()">Supprimer</button>
+    <button md-fab (click)="enleverUpload()"><md-icon>delete_forever</md-icon></button>
   </div>
 
 

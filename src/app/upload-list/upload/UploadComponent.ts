@@ -4,6 +4,7 @@ import {
   EventEmitter, Output, ComponentRef
 } from '@angular/core';
 import {Http, Headers, RequestOptions} from '@angular/http';
+import {UploadEvent} from "../UploadEvent";
 
 @Component({
   selector: 'mon-upload-composant',
@@ -18,18 +19,16 @@ export class UploadComponent {
   @ViewChild('monUploadIcon') monUploadIconRef;
   @ViewChild('divBouton') divBoutonRef;
 
-  @Output() notifier: EventEmitter<string> = new EventEmitter<string>();
+  @Output() notifier: EventEmitter<UploadEvent> = new EventEmitter();
 
   @Input() monId: string;// 'mon-upload-1'
+  @Input() uploadUrl: string;
 
   resultatUpload: String;
 
   constructor(private http: Http) { }
 
-  @Input() multiple: boolean = true;
-  url = undefined; // "http://localhost:8080/SpringFileUpload/uploadFile";
-
-
+  @Input() multiple: boolean = false;
 
   /**
    * Upload...
@@ -69,7 +68,7 @@ export class UploadComponent {
     }
 
     // Uploader le fichier si le url est defini
-    if (this.url) {
+    if (this.uploadUrl && this.uploadUrl.length > 0) {
 
       // See https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
       let formData: FormData = new FormData();
@@ -81,7 +80,7 @@ export class UploadComponent {
 
 
       this.http
-        .post(this.url + '?name=' + files[0].name, formData, options)
+        .post(this.uploadUrl + '?name=' + files[0].name, formData, options)
         .subscribe(
           x => this.resultatUpload = x.toString(),
           e => console.log('------> onError: %s', e.toString()),
@@ -97,6 +96,6 @@ export class UploadComponent {
    * Enlever file upload
    */
   enleverUpload() {
-    this.notifier.emit(this.monId);
+    this.notifier.emit(new UploadEvent(this.monId, "suppression"));
   }
 }
