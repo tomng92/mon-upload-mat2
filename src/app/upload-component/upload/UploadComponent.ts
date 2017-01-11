@@ -36,7 +36,7 @@ export class UploadComponent {
   /**
    * Upload...
    */
-  selectionFichier() {
+  private selectionFichier() {
 
     let files: FileList = this.monUploadRef.nativeElement.files;
     let nbFiles: number = files.length;
@@ -95,7 +95,7 @@ export class UploadComponent {
    * Fonction invoqué par notre container si le fichier est valide (< 2M).
    * @param fichier
    */
-  fichierValide(fichier: File) {
+  public fichierValide(fichier: File) {
 
     // Changer le label
     this.monUploadLabelRef.nativeElement.innerHTML = fichier.name;
@@ -134,7 +134,7 @@ export class UploadComponent {
   /**
    * Enlever file upload
    */
-  supprimerUploadWidget() {
+  private supprimerUploadWidget() {
     this.notifier.emit(new UploadEvent(this.monId, UploadEvent.SUPPRIMER_WIDGET, null));
   }
 }

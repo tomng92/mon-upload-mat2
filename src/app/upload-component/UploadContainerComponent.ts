@@ -72,7 +72,12 @@ export class UploadContainerComponent {
     if (event.action == UploadEvent.SUPPRIMER_WIDGET) {
       widget.destroy();
     } else {
-      this.verifierFichier(widget, event.fichier);
+       if (!this.verifierTailleFichier(widget, event.fichier)) {
+         this.afficherErreur(`Le fichier '${event.fichier.name}' est plus grand que 2 mégabytes`);
+       } else if (!this.verifierFichierDejaSelectionne(widget, event.fichier)) {
+         this.afficherErreur(`Le fichier '${event.fichier.name}' est déjà sélectionné`);
+       } else
+         widget.instance.fichierValide(event.fichier); // ficher valide
     }
   }
 
@@ -80,7 +85,7 @@ export class UploadContainerComponent {
    * Verifier la taille du fichier choisi
    * @param widget
    */
-  private verifierFichier(widget: ComponentRef<UploadComponent>, fichier: File): void {
+  private verifierTailleFichier(widget: ComponentRef<UploadComponent>, fichier: File) : boolean{
 
     /**
      * Vérifier que les fichiers sont plus petits que 2 Meg =  2*1024*1024
@@ -94,15 +99,33 @@ export class UploadContainerComponent {
     console.info("=====> name %s, length = %d,  extension = %s", fileName, fileLength, fileExt);
 
     let maxSize = 2 * 1024 * 1024;
-    maxSize = 1111;
-    if (fileLength <= maxSize) {
+    // maxSize = 1111;
 
-      // fichier est validé
-      widget.instance.fichierValide(fichier);
-    } else {
-      this.afficherErreur(`La taille de ${fileName} choisi est plus grand que 2 mégabytes`);
+    return(fileLength <= maxSize);
+  }
+
+  /**
+   * Vérifier si le fichier est déja selectionné.
+   * @param widget
+   * @param fichier
+   */
+  private verifierFichierDejaSelectionne(widget: ComponentRef<UploadComponent>, fichier: File): boolean {
+
+    // rechercher le upload widget
+    for (let compo of this.listeUpload) {
+      // verifier si le meme fichier est dans un autre upload
+      if (compo.instance.monId != widget.instance.monId) {
+        // verifier nom et taille fichier.
+        // Note: le <input type=file> ne nous donne pas le path!
+        if (compo.instance.fichierChoisi
+          && compo.instance.fichierChoisi.name == fichier.name
+          &&  compo.instance.fichierChoisi.size == fichier.size) {
+          return false;
+        }
+      }
     }
 
+    return true;
   }
 
   /**
