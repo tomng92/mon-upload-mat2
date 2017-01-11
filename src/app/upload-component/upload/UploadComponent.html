@@ -2,7 +2,7 @@
 
   <div style="float: left;">
     <input type="file" #monUploadInput multiple="false" [attr.name]="monId" [attr.id]="monId"
-           class="inputfile inputfile-1" (change)="uploadFichier()"/>
+           class="inputfile inputfile-1" (change)="selectionFichier()"/>
 
     <label [attr.for]="monId">
       <span #monUploadIcon><md-icon>file_upload</md-icon></span>
@@ -12,7 +12,7 @@
   </div>
 
   <div #divBouton style="display: none;float: right;padding-right:120px;">
-    <button md-fab (click)="enleverUpload()"><md-icon>delete_forever</md-icon></button>
+    <button md-fab (click)="supprimerUploadWidget()"><md-icon>delete_forever</md-icon></button>
   </div>
 
 
