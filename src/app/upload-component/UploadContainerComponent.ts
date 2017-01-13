@@ -9,6 +9,7 @@ import {
 import {UploadComponent} from "./upload/UploadComponent";
 import {UploadEvent} from "./UploadEvent";
 import {MdDialogRef, MdDialog} from "@angular/material";
+import {Headers, RequestOptions, Http} from "@angular/http";
 
 @Component({
   selector: 'mon-upload-list',
@@ -27,7 +28,7 @@ export class UploadContainerComponent {
   /**
    * Constructor.
    */
-  constructor(private resolver: ComponentFactoryResolver, private dialog: MdDialog) {
+  constructor(private http: Http, private resolver: ComponentFactoryResolver, private dialog: MdDialog) {
   }
 
 
@@ -72,12 +73,12 @@ export class UploadContainerComponent {
     if (event.action == UploadEvent.SUPPRIMER_WIDGET) {
       widget.destroy();
     } else {
-       if (!this.verifierTailleFichier(widget, event.fichier)) {
-         this.afficherErreur(`Le fichier '${event.fichier.name}' est plus grand que 2 mégabytes`);
-       } else if (!this.verifierFichierDejaSelectionne(widget, event.fichier)) {
-         this.afficherErreur(`Le fichier '${event.fichier.name}' est déjà sélectionné`);
-       } else
-         widget.instance.fichierValide(event.fichier); // ficher valide
+      if (!this.verifierTailleFichier(widget, event.fichier)) {
+        this.afficherErreur(`Le fichier '${event.fichier.name}' est plus grand que 2 mégabytes`);
+      } else if (!this.verifierFichierDejaSelectionne(widget, event.fichier)) {
+        this.afficherErreur(`Le fichier '${event.fichier.name}' est déjà sélectionné`);
+      } else
+        widget.instance.fichierValide(event.fichier); // ficher valide
     }
   }
 
@@ -85,7 +86,7 @@ export class UploadContainerComponent {
    * Verifier la taille du fichier choisi
    * @param widget
    */
-  private verifierTailleFichier(widget: ComponentRef<UploadComponent>, fichier: File) : boolean{
+  private verifierTailleFichier(widget: ComponentRef<UploadComponent>, fichier: File): boolean {
 
     /**
      * Vérifier que les fichiers sont plus petits que 2 Meg =  2*1024*1024
@@ -101,7 +102,7 @@ export class UploadContainerComponent {
     let maxSize = 2 * 1024 * 1024;
     // maxSize = 1111;
 
-    return(fileLength <= maxSize);
+    return (fileLength <= maxSize);
   }
 
   /**
@@ -119,7 +120,7 @@ export class UploadContainerComponent {
         // Note: le <input type=file> ne nous donne pas le path!
         if (compo.instance.fichierChoisi
           && compo.instance.fichierChoisi.name == fichier.name
-          &&  compo.instance.fichierChoisi.size == fichier.size) {
+          && compo.instance.fichierChoisi.size == fichier.size) {
           return false;
         }
       }
@@ -127,6 +128,51 @@ export class UploadContainerComponent {
 
     return true;
   }
+
+  /**
+   * Sleep comme au java (https://eureka.ykyuen.info/2011/02/20/javascript-sleep-function/)
+   * @param delay en millisecondes
+   */
+  mySleep(delay) {
+    console.log('start sleep');
+    let start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+    console.log('end sleep');
+
+  }
+
+  /**
+   * Invoker le http pour upload du fichier
+   */
+  executeHttpUpload(uploadWidget: ComponentRef<UploadComponent>) {
+
+    let fichier: File = uploadWidget.instance.fichierChoisi;
+    uploadWidget.instance.signalerStartUpload();
+    this.uploadUrl = "http://localhost:8080/SpringFileUpload/uploadFile";
+
+
+    // See https://developer.mozilla.org/en-US/docs/Web/API/FormData/append
+    let formData: FormData = new FormData();
+    formData.append('monUpload', fichier, fichier.name);
+    let headers = new Headers();
+
+    headers.append('Accept', 'application/json');
+    let options = new RequestOptions({headers: headers});
+
+
+    this.http
+      .post(this.uploadUrl + '?name=' + fichier.name, formData, options)
+      .subscribe(
+        x => console.log("http-> " + x),
+        err => uploadWidget.instance.signalerEndUpload(false, err),
+        () => uploadWidget.instance.signalerEndUpload(true),
+      );
+
+    //this.mySleep(4000);
+
+    //uploadWidget.instance.signalerEndUpload(true);
+  }
+
 
   /**
    * click handler pour ajout un autre upload
@@ -139,7 +185,11 @@ export class UploadContainerComponent {
    * Uploader les fichiers choisis
    */
   private uploadFichiers() {
-    console.log('uploader fichier......');
+    for (let compo of this.listeUpload) {
+
+      console.log(`uploading demandé pour ${compo.instance.fichierChoisi.name}`);
+      this.executeHttpUpload(compo);
+    }
   }
 
 

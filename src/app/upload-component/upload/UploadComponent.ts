@@ -2,9 +2,10 @@ import {
   Component, ElementRef, Input, ViewChild, transition, animate, state, style, trigger,
   EventEmitter, Output, ComponentRef
 } from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import {UploadEvent} from "../UploadEvent";
 import {MdDialogRef, MdDialog, MdDialogConfig} from "@angular/material";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'mon-upload-composant',
@@ -18,8 +19,15 @@ export class UploadComponent {
   @ViewChild('monUploadLabel') monUploadLabelRef;
   @ViewChild('monUploadIcon') monUploadIconRef;
   @ViewChild('divBouton') divBoutonRef;
+  @ViewChild('monDiv') monDivRef;
+  @ViewChild('monFileName') monFilNameRef;
+  @ViewChild('monFileDate') monFilDateRef;
+  @ViewChild('monProgressBar') monProgressBarRef;
+  @ViewChild('monCheckIcon') monCheckIconRef;
+  @ViewChild('monDeleteIcon') monDeleteIconRef;
+  @ViewChild('monUploadResultatMsg') monUploadResultatMsgRef;
 
-  @Output() notifier: EventEmitter<UploadEvent> = new EventEmitter();
+  @Output() notifier: EventEmitter<UploadEvent> = new EventEmitter<UploadEvent>();
 
   @Input() monId: string;// 'mon-upload-1'
   @Input() uploadUrl: string;
@@ -33,6 +41,7 @@ export class UploadComponent {
   constructor(private http: Http) {
   }
 
+
   /**
    * Upload...
    */
@@ -45,6 +54,8 @@ export class UploadComponent {
 
     // demander au container de verifier le fichier choisi
     this.notifier.emit(new UploadEvent(this.monId, UploadEvent.VERIFIER_FICHIER, files[0]));
+
+
 
     /**
 
@@ -98,14 +109,62 @@ export class UploadComponent {
   public fichierValide(fichier: File) {
 
     // Changer le label
-    this.monUploadLabelRef.nativeElement.innerHTML = fichier.name;
-    this.monUploadIconRef.nativeElement.style.display = 'none'; // cacher img
+    //this.monUploadLabelRef.nativeElement.innerHTML = fichier.name;
+    //this.monUploadIconRef.nativeElement.style.display = 'none'; // cacher img
 
     // montrer le bouton Supprimer
     this.divBoutonRef.nativeElement.style.display = 'block';
 
     // set le fichierChoisi
     this.fichierChoisi = fichier;
+
+
+    this.monDivRef.nativeElement.style.display = 'none'; // cacher file upload
+    this.monFilNameRef.nativeElement.innerHTML = `${fichier.name}`;
+    this.monFilDateRef.nativeElement.innerHTML = `${fichier.lastModifiedDate}`;
+  }
+
+  /**
+   * On commence le upload
+   */
+  signalerStartUpload() {
+    // Observable.timer(1000).subscribe(() => this.showElem(this.monProgressBarRef));
+
+    this.showElem(this.monProgressBarRef);
+  }
+
+  /**
+   * Upload a terminé
+   * @param result
+   */
+ signalerEndUpload(succes: boolean, errorObj?: Response) {
+    Observable.timer(2000).subscribe(() => {
+      this.hideElem(this.monProgressBarRef);
+
+      if (succes) {
+        this.showElem(this.monCheckIconRef);
+      } else {
+        this.showElem(this.monUploadResultatMsgRef);
+        this.monUploadResultatMsgRef.nativeElement.innerHTML = errorObj.statusText;
+        console.log(errorObj.text());
+        this.parseHtml(errorObj.text());
+      }
+      this.hideElem(this.monDeleteIconRef);
+    });
+  }
+
+  private parseHtml(htmlContent: string) {
+   let dom = document.createElement('html');
+   dom.innerHTML = htmlContent;
+   dom.getElementsByTagName('body');
+
+  }
+
+  private hideElem(elem: ElementRef) {
+    elem.nativeElement.style.display = "none";
+  }
+  private showElem(elem: ElementRef) {
+    elem.nativeElement.style.display = "block";
   }
 
 
@@ -126,8 +185,8 @@ export class UploadComponent {
       .post(this.uploadUrl + '?name=' + file.name, formData, options)
       .subscribe(
         x => console.log(x.toString()),
-        e => console.log('------> Erreur du upload: %s', e.toString()),
-        () => console.log("Succès!")
+        err => this.signalerEndUpload(false, err),
+        () => this.signalerEndUpload(true)
       );
   }
 

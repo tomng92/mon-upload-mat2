@@ -1,0 +1,102 @@
+<html>
+<head><title>Apache Tomcat/7.0.47 - Rapport d''erreur</title>
+  <style><!--
+  H1 {
+    font-family: Tahoma, Arial, sans-serif;
+    color: white;
+    background-color: #525D76;
+    font-size: 22px;
+  }
+
+  H2 {
+    font-family: Tahoma, Arial, sans-serif;
+    color: white;
+    background-color: #525D76;
+    font-size: 16px;
+  }
+
+  H3 {
+    font-family: Tahoma, Arial, sans-serif;
+    color: white;
+    background-color: #525D76;
+    font-size: 14px;
+  }
+
+  BODY {
+    font-family: Tahoma, Arial, sans-serif;
+    color: black;
+    background-color: white;
+  }
+
+  B {
+    font-family: Tahoma, Arial, sans-serif;
+    color: white;
+    background-color: #525D76;
+  }
+
+  P {
+    font-family: Tahoma, Arial, sans-serif;
+    background: white;
+    color: black;
+    font-size: 12px;
+  }
+
+  A {
+    color: black;
+  }
+
+  A.name {
+    color: black;
+  }
+
+  HR {
+    color: #525D76;
+  }
+
+  --></style>
+</head>
+<body><h1>Etat HTTP 500 - Request processing failed; nested exception is
+  com.journaldev.spring.controller.error.FileUploadException: Le nom du fichier commence avec 'test'. Désolé ceci ne
+  marche pas à SODEC!!</h1>
+<HR size="1" noshade="noshade">
+<p><b>type</b> Rapport d''exception</p>
+<p><b>message</b> <u>Request processing failed; nested exception is
+  com.journaldev.spring.controller.error.FileUploadException: Le nom du fichier commence avec 'test'. Désolé ceci ne
+  marche pas à SODEC!!</u></p>
+<p><b>description</b> <u>Le serveur a rencontré une erreur interne qui l''a empêché de satisfaire la requête.</u></p>
+<p><b>exception</b>
+<pre>org.springframework.web.util.NestedServletException: Request processing failed; nested exception is com.journaldev.spring.controller.error.FileUploadException: Le nom du fichier commence avec 'test'. Désolé ceci ne marche pas à SODEC!!
+	org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:982)
+	org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:872)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:647)
+	org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+</pre>
+</p><p><b>cause mère</b>
+<pre>com.journaldev.spring.controller.error.FileUploadException: Le nom du fichier commence avec 'test'. Désolé ceci ne marche pas à SODEC!!
+	com.journaldev.spring.controller.FileUploadController.uploadFileHandler(FileUploadController.java:42)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:498)
+	org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:221)
+	org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:137)
+	org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:111)
+	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:806)
+	org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:729)
+	org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:959)
+	org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:893)
+	org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:872)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:647)
+	org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+</pre>
+</p><p><b>note</b> <u>La trace complète de la cause mère de cette erreur est disponible dans les fichiers journaux de
+  Apache Tomcat/7.0.47.</u></p>
+<HR size="1" noshade="noshade">
+<h3>Apache Tomcat/7.0.47</h3></body>
+</html>

@@ -1,18 +1,58 @@
 <md-list-item style="margin:12px 12px;width: 100%;display:inline-block;">
 
-  <div style="float: left;">
+  <div #monDiv style="float: left;">
     <input type="file" #monUploadInput multiple="false" [attr.name]="monId" [attr.id]="monId"
            class="inputfile inputfile-1" (change)="selectionFichier()"/>
 
     <label [attr.for]="monId">
-      <span #monUploadIcon><md-icon>file_upload</md-icon></span>
-      <span #monUploadLabel>Choisir un fichier</span>
-
+      <button md-button #monUploadIcon (click)="monUploadInput.click()">
+        <md-icon>file_upload</md-icon>
+        Veuillez choisir un fichier
+      </button>
     </label>
+
   </div>
 
-  <div #divBouton style="display: none;float: right;padding-right:120px;">
-    <button md-fab (click)="supprimerUploadWidget()"><md-icon>delete_forever</md-icon></button>
+
+  <div #divBouton style="display: none;">
+    <table style="width: 100%;border: 2px dashed;">
+      <colgroup>
+        <col style="width:30%;align: center;">
+        <col style="width:20%;align: center;">
+        <col style="width:10%;align: center;">
+        <col style="width:40%;text-align: center;">
+      </colgroup>
+      <tr>
+        <td #monFileName></td>
+        <td #monFileDate></td>
+
+
+
+        <td style="text-align: center;">
+          <button md-fab (click)="supprimerUploadWidget()">
+            <div #monDeleteIcon >
+              <md-icon>delete_forever</md-icon>
+            </div>
+            <div #monCheckIcon  style="display: none;">
+              <md-icon>check</md-icon>
+            </div>
+            <div #monUploadResultatMsg style="display: none;"></div>
+          </button>
+        </td>
+
+
+        <td>
+          <div #monProgressBar
+               style="display: none;">
+            <md-progress-bar class="app-progress"
+                             mode="indeterminate"
+                             aria-label="Indeterminate progress-bar example"></md-progress-bar>
+          </div>
+        </td>
+      </tr>
+
+    </table>
+
   </div>
 
 
