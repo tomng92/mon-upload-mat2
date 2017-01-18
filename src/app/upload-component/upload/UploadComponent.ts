@@ -138,7 +138,7 @@ export class UploadComponent {
    * @param result
    */
  signalerEndUpload(succes: boolean, errorObj?: Response) {
-    Observable.timer(2000).subscribe(() => {
+    //Observable.timer(2000).subscribe(() => {
       this.hideElem(this.monProgressBarRef);
 
       if (succes) {
@@ -150,7 +150,7 @@ export class UploadComponent {
         this.parseHtml(errorObj.text());
       }
       this.hideElem(this.monDeleteIconRef);
-    });
+   // });
   }
 
   private parseHtml(htmlContent: string) {

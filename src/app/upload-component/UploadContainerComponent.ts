@@ -10,6 +10,7 @@ import {UploadComponent} from "./upload/UploadComponent";
 import {UploadEvent} from "./UploadEvent";
 import {MdDialogRef, MdDialog} from "@angular/material";
 import {Headers, RequestOptions, Http} from "@angular/http";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'mon-upload-list',
@@ -138,7 +139,6 @@ export class UploadContainerComponent {
     let start = new Date().getTime();
     while (new Date().getTime() < start + delay);
     console.log('end sleep');
-
   }
 
   /**
@@ -164,9 +164,49 @@ export class UploadContainerComponent {
       .post(this.uploadUrl + '?name=' + fichier.name, formData, options)
       .subscribe(
         x => console.log("http-> " + x),
-        err => uploadWidget.instance.signalerEndUpload(false, err),
-        () => uploadWidget.instance.signalerEndUpload(true),
+        err => this.afficherErreur(`Televersement echoué de ${this.listeUpload.length} fichiers.` ),
+        () => this.afficherErreur(`Televersement avec succès de ${this.listeUpload.length} fichiers.` ),
       );
+
+    //this.mySleep(4000);
+
+    //uploadWidget.instance.signalerEndUpload(true);
+  }
+
+  /**
+   * =============================
+   * Invoker le http pour upload du fichier des fichiers multiples.....
+   * =============================
+   * As of 13:58pm du 17 janvier 2017, le
+   */
+  executeHttpUploadMultiple() {
+
+
+    let formData: FormData = new FormData();
+    this.uploadUrl = "http://localhost:8080/SpringFileUpload/uploadMultipleFile";
+
+
+    // ajouter les fichiers au formData
+    for (let compo of this.listeUpload) {
+      let fichier: File = compo.instance.fichierChoisi;
+
+      console.log(`uploading demandé pour ${compo.instance.fichierChoisi.name}`);
+      formData.append('fichierUpload', fichier, fichier.name);
+    }
+
+
+   let headers = new Headers();
+
+    headers.append('Accept', 'application/json');
+    let options = new RequestOptions({headers: headers});
+
+
+    this.http
+      .post(this.uploadUrl + '?name=' + (this.listeUpload.length + " fichiers"), formData, options)
+      .subscribe(
+        x => console.log("http-> " + x),
+        err => this.afficherErreur(`Televersement echoué de ${this.listeUpload.length} fichiers.` ),
+        () => this.afficherErreur(`Televersement avec succès de ${this.listeUpload.length} fichiers.` )      );
 
     //this.mySleep(4000);
 
@@ -185,13 +225,25 @@ export class UploadContainerComponent {
    * Uploader les fichiers choisis
    */
   private uploadFichiers() {
-    for (let compo of this.listeUpload) {
 
-      console.log(`uploading demandé pour ${compo.instance.fichierChoisi.name}`);
-      this.executeHttpUpload(compo);
+    let uploadMultiple  = true;
+
+    if (uploadMultiple) {
+      this.executeHttpUploadMultiple();
+    } else {
+
+      for (let compo of this.listeUpload) {
+
+        console.log(`uploading demandé pour ${compo.instance.fichierChoisi.name}`);
+        this.executeHttpUpload(compo);
+      }
     }
   }
 
+  // private uploadFichiers() {
+  //     this.uploadCetItem(0);
+  // }
+  //
 
   /**
    * Dialogue pour afficher erreur
